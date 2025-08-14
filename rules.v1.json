@@ -1,0 +1,37 @@
+{
+  "time_pressed": {
+    "if_days_to_exam_lte": 30,
+    "adjust": {
+      "assessment_freq": "+",
+      "homework": "-"
+    }
+  },
+  "concept_first": {
+    "if_baseline_mean_lte": 20,
+    "adjust": {
+      "mini_lesson": "+"
+    }
+  },
+  "practice_first": {
+    "if_pref_mode": "practice",
+    "adjust": {
+      "drill": "++",
+      "feedback_len": "-"
+    }
+  },
+  "anxious": {
+    "if_anxiety": "high",
+    "character_bias": "quinn",
+    "adjust": {
+      "difficulty": "-",
+      "praise": "+"
+    }
+  },
+  "speaking_focus": {
+    "if_lowest_section": "S",
+    "adjust": {
+      "S": "+",
+      "recordings_per_week": 2
+    }
+  }
+}
