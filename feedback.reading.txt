@@ -1,0 +1,6 @@
+형식:
+[요점] 정답: {OPTION}. 한줄 요약: {RATIONALE}.
+[근거] "{QUOTE}"
+[오답유형] {DISTRACTOR_REASON}
+[오늘 할 일 2개] 1) {DRILL}, 2) {REVIEW}
+캐릭터 말투·길이 제한을 준수하라.

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>AITOR — 튜터 추천</title>
+<style>
+  body { font-family: Inter, system-ui, sans-serif; max-width: 960px; margin: 28px auto; padding: 0 16px; }
+  .cards { display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; }
+  .card { border:1px solid #e2e8f0; padding:16px; border-radius:10px; }
+  .card.reco { outline: 3px solid #22c55e; }
+  button { padding:8px 10px; font-size:14px; width:100%; margin-top:8px; }
+</style>
+</head>
+<body>
+<h1>추천 튜터</h1>
+<div id="why" style="margin-bottom:12px;color:#334155"></div>
+<div class="cards" id="cards"></div>
+<script>
+async function loadAitors() {
+  const res = await fetch('./assets/aitors.json');
+  return res.json();
+}
+async function recommend(profile) {
+  const r = await fetch('/api/recommend', {
+    method:'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ profile })
+  });
+  return r.json();
+}
+function cardHtml(ch, recommended=false) {
+  return `<div class="card ${recommended ? 'reco':''}">
+    <h3>${ch.name}</h3>
+    <p style="color:#475569">${ch.tagline}</p>
+    <button onclick="selectTutor('${ch.id}')">이 튜터 선택</button>
+  </div>`;
+}
+async function main() {
+  const profile = JSON.parse(localStorage.getItem('aitor_profile') || '{}');
+  const aitors = await loadAitors();
+  const reco = await recommend(profile);
+  document.getElementById('why').textContent = '추천 이유: ' + (reco.reason || '데이터 기반');
+  const container = document.getElementById('cards');
+  aitors.forEach(ch => container.insertAdjacentHTML('beforeend', cardHtml(ch, ch.id === reco.character_id)));
+}
+window.selectTutor = function(id){
+  localStorage.setItem('aitor_character', id);
+  location.href = './chat.html';
+}
+main();
+</script>
+</body></html>

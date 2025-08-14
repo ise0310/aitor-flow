@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "functions": {
+    "api/*.js": {
+      "runtime": "nodejs18.x",
+      "memory": 512,
+      "maxDuration": 30
+    }
+  },
+  "routes": [
+    {
+      "src": "^/aitor/(.*)$",
+      "dest": "/aitor/$1"
+    },
+    {
+      "src": "^/api/(.*)$",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "^(?!/aitor/|/api/).*$",
+      "dest": "/aitor/index.html"
+    }
+  ]
+}

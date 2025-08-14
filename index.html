@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>AITOR — 서베이</title>
+<link rel="icon" href="/favicon.ico"/>
+<style>
+  body { font-family: Inter, system-ui, sans-serif; max-width: 960px; margin: 28px auto; padding: 0 16px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .row { margin: 8px 0; }
+  label { display:block; font-size: 14px; color:#334155; margin-bottom:6px; }
+  input, select, button { padding:8px 10px; font-size:14px; width:100%; }
+  .actions { margin-top: 16px; display:flex; gap:12px; }
+  .card { border:1px solid #e2e8f0; padding:16px; border-radius:10px; margin-bottom:16px; }
+</style>
+</head>
+<body>
+  <h1>AITOR — 빠른 서베이</h1>
+  <div class="card">
+    <div class="grid">
+      <div class="row"><label>이름</label><input id="name"/></div>
+      <div class="row"><label>이메일</label><input id="email" type="email"/></div>
+      <div class="row"><label>나이</label><input id="age" type="number" min="10" max="80"/></div>
+      <div class="row">
+        <label>TOEFL 경험</label>
+        <select id="experience">
+          <option value="none">아직 안 봄</option>
+          <option value="0-50">~50</option>
+          <option value="51-80">51–80</option>
+          <option value="81-100">81–100</option>
+          <option value="101+">101+</option>
+        </select>
+      </div>
+      <div class="row"><label>현재 점수(모르면 비워두기)</label><input id="currentScore" placeholder="예: 72"/></div>
+      <div class="row"><label>목표 점수</label><input id="targetScore" placeholder="예: 95"/></div>
+      <div class="row">
+        <label>시험까지 남은 시간</label>
+        <select id="timeLeft">
+          <option value="2w">2주 이하</option>
+          <option value="1m">1개월</option>
+          <option value="3m">3개월</option>
+          <option value="6m+">6개월+</option>
+        </select>
+      </div>
+      <div class="row">
+        <label>영어 레벨</label>
+        <select id="englishLevel">
+          <option>Native</option><option>Fluent</option><option>Conversational</option>
+          <option>Can listen</option><option>Not at all</option>
+        </select>
+      </div>
+    </div>
+    <div class="actions">
+      <button id="next">튜터 추천 받기</button>
+    </div>
+  </div>
+<script>
+document.getElementById('next').onclick = async () => {
+  const profile = {
+    name: document.getElementById('name').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    age: parseInt(document.getElementById('age').value || '0',10),
+    toefl_experience: document.getElementById('experience').value,
+    current_score: document.getElementById('currentScore').value.trim(),
+    target_score: document.getElementById('targetScore').value.trim(),
+    time_left: document.getElementById('timeLeft').value,
+    english_level: document.getElementById('englishLevel').value
+  };
+  localStorage.setItem('aitor_profile', JSON.stringify(profile));
+  location.href = './recommend.html';
+};
+</script>
+</body></html>

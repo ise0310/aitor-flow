@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>AITOR — 레벨테스트</title>
+<style>
+  body { font-family: Inter, system-ui, sans-serif; max-width: 900px; margin: 28px auto; padding: 0 16px; }
+  .card { border:1px solid #e2e8f0; border-radius:10px; padding:16px; margin-bottom:12px; }
+  button { padding:8px 10px; font-size:14px; }
+  .row { margin:8px 0; }
+</style>
+</head>
+<body>
+<h1>간단 레벨테스트</h1>
+<div class="card">
+  <h3>Reading Q1</h3>
+  <div class="row">"The migration slowed after the temperature dropped." 이 문장의 의미로 올바른 것은?</div>
+  <div class="row"><label><input type="radio" name="r1" value="A"> A) 처음에는 빨랐다</label></div>
+  <div class="row"><label><input type="radio" name="r1" value="B"> B) 온도 하락 이후 속도가 느려졌다</label></div>
+  <div class="row"><label><input type="radio" name="r1" value="C"> C) 언제나 일정했다</label></div>
+</div>
+
+<div class="card">
+  <h3>Reading Q2</h3>
+  <div class="row">문단의 주된 요지를 고르시오.</div>
+  <div class="row"><label><input type="radio" name="r2" value="A"> A) 연구의 한계</label></div>
+  <div class="row"><label><input type="radio" name="r2" value="B"> B) 방법론 비교</label></div>
+  <div class="row"><label><input type="radio" name="r2" value="C"> C) 사례 소개</label></div>
+</div>
+
+<div class="card">
+  <h3>Speaking</h3>
+  <div class="row">Prompt: Do you prefer studying alone or with others?</div>
+  <textarea id="speak" rows="4" style="width:100%" placeholder="여기에 3~5문장으로 답변을 적어주세요."></textarea>
+</div>
+
+<div class="card">
+  <button id="submit">제출하고 결과 보기</button>
+</div>
+
+<script>
+document.getElementById('submit').onclick = async () => {
+  const ans = {
+    r1: (document.querySelector('input[name="r1"]:checked')||{{}}).value || null,
+    r2: (document.querySelector('input[name="r2"]:checked')||{{}}).value || null,
+    speak: document.getElementById('speak').value.trim()
+  };
+  const r = await fetch('/api/leveltest', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ answers: ans })
+  });
+  const data = await r.json();
+  localStorage.setItem('aitor_level', JSON.stringify(data));
+  location.href='./plan.html';
+};
+</script>
+</body></html>

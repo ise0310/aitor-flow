@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>AITOR — 튜터 채팅</title>
+<style>
+  body { font-family: Inter, system-ui, sans-serif; max-width: 900px; margin: 28px auto; padding: 0 16px; }
+  .chat { border:1px solid #e2e8f0; border-radius:10px; padding:16px; min-height: 300px; }
+  .msg { margin: 8px 0; }
+  .me { text-align:right; color:#0ea5e9; }
+  .bot { text-align:left; color:#0f172a; white-space:pre-wrap;}
+  .row { display:flex; gap:8px; margin-top:8px; }
+  input, button { padding:8px 10px; font-size:14px; }
+</style>
+</head>
+<body>
+<h1>튜터와 대화</h1>
+<div id="chat" class="chat"></div>
+<div class="row">
+  <input id="in" placeholder="메시지를 입력..." style="flex:1"/>
+  <button id="send">보내기</button>
+  <button id="level">레벨테스트</button>
+</div>
+<script>
+const chat = document.getElementById('chat');
+const add = (cls, text) => { chat.insertAdjacentHTML('beforeend', `<div class="msg ${cls}">${text}</div>`); chat.scrollTop = chat.scrollHeight; };
+
+async function systemStart(){
+  const character_id = localStorage.getItem('aitor_character') || 'alex';
+  const profile = JSON.parse(localStorage.getItem('aitor_profile') || '{}');
+  const r = await fetch('/api/chat', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ character_id, messages: [{role:'system', content:'opening'}], profile })
+  });
+  const data = await r.json();
+  add('bot', data.reply || '안녕하세요!');
+}
+document.getElementById('send').onclick = async () => {
+  const txt = document.getElementById('in').value.trim();
+  if (!txt) return;
+  add('me', txt);
+  document.getElementById('in').value='';
+  const character_id = localStorage.getItem('aitor_character') || 'alex';
+  const r = await fetch('/api/chat', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ character_id, messages: [{role:'user', content: txt}] })
+  });
+  const data = await r.json();
+  add('bot', data.reply || '(응답 없음)');
+};
+document.getElementById('level').onclick = () => location.href='./leveltest.html';
+systemStart();
+</script>
+</body></html>
